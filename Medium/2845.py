@@ -1,11 +1,15 @@
-class Solution(object):
-    def countInterestingSubarrays(self, nums, modulo, k):
-        res = 0
-        for i in range(len(nums)):
-            cnt = 0
-            for j in range(i, len(nums)):
-                if nums[j] % modulo == k:
-                    cnt += 1
-                if cnt % modulo == k:
-                    res += 1
-        return res
+class Solution:
+    def countInterestingSubarrays(self, nums: List[int], modulo: int, k: int) -> int:
+        prefixModCount = {0: 1}
+        prefixSum = 0
+        result = 0
+        
+        for num in nums:
+            if num % modulo == k:
+                prefixSum += 1
+            remainder = prefixSum % modulo
+            target = (remainder - k) % modulo
+            result += prefixModCount.get(target, 0)            
+            prefixModCount[remainder] = prefixModCount.get(remainder, 0) + 1
+        
+        return result        
